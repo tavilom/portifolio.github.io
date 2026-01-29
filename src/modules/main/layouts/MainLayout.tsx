@@ -18,14 +18,18 @@ import {
   Card,
   CardContent,
   Avatar,
+  Chip,
+  Button,
+  CardActions,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import CodeIcon from "@mui/icons-material/Code";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { LazyMotion, m } from "framer-motion";
-
 
 // import PROFILE_PHOTO from "@/assets/minha-foto.jpg";
 
@@ -43,6 +47,16 @@ type Skill = {
   description: string;
 };
 
+type FeaturedProject = {
+  title: string;
+  tagline: string; // 1 frase de impacto
+  badges: string[]; // papel / tipo / status
+  stack: string[]; // stack principal (curta)
+  repoUrl?: string;
+  figmaUrl?: string;
+  demoUrl?: string;
+};
+
 // ------------------------------
 // Sidebar
 // ------------------------------
@@ -50,6 +64,33 @@ const TILES: Tile[] = [
   { key: "projetos", title: "Protótipos do Figma", icon: <DesignServicesIcon /> },
   { key: "codigos", title: "Projetos do GitHub", icon: <CodeIcon /> },
   { key: "contato", title: "Contato", icon: <ContactMailIcon /> },
+];
+
+// ------------------------------
+// Home - Projetos em destaque (hardcode)
+// ------------------------------
+const FEATURED_PROJECTS: FeaturedProject[] = [
+  {
+    title: "Termômetro do Humor",
+    tagline: "Mapeamento do estado psicológico com interface amigável e fluxo rápido.",
+    badges: ["Fullstack", "MVP", "Concluído"],
+    stack: ["React", "TypeScript", "NestJS", "Prisma", "MySQL"],
+    repoUrl: "https://github.com/tavilom/Termomedo-do-humor",
+  },
+  {
+    title: "Caixinha do bem-estar",
+    tagline: "Micro-momentos de reconhecimento para fortalecer cultura e reduzir estresse.",
+    badges: ["UI/UX", "Fullstack", "Concluído"],
+    stack: ["React", "TypeScript", "NestJS", "Prisma", "MySQL"],
+    repoUrl: "https://github.com/tavilom/Caixinha-do-bem-estar",
+  },
+  {
+    title: "FAQ Tasy (com Chatbot)",
+    tagline: "Apoio à decisão + chatbot com LLM interna para dúvidas recorrentes.",
+    badges: ["Fullstack", "Machine Learnign", "Concluido"],
+    stack: ["React", "NestJS", "Python", "FastAPI", "XGBoost"],
+    repoUrl: "https://github.com/tavilom/faq-tasy",
+  },
 ];
 
 // ------------------------------
@@ -84,6 +125,11 @@ const SIDEBAR_WIDTH = 280;
 
 const loadFeatures = () => import("framer-motion").then((res) => res.domAnimation);
 
+function openExternal(url?: string) {
+  if (!url) return;
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
 // ------------------------------
 // Componente
 // ------------------------------
@@ -117,7 +163,6 @@ const MainLayout: React.FC = () => {
         flexDirection: "column",
       }}
     >
-      {/* ✅ Header com foto + nome */}
       <Box sx={{ p: 2 }}>
         <Stack spacing={1.25} alignItems="center">
           <Avatar
@@ -220,6 +265,108 @@ const MainLayout: React.FC = () => {
             >
               {pathname === "/" ? (
                 <Stack spacing={4}>
+                  {/* ✅ NOVO: Destaques */}
+                  <Box>
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={1}
+                      alignItems={{ xs: "flex-start", sm: "center" }}
+                      justifyContent="space-between"
+                      mb={2}
+                    >
+                      <Typography variant="h6" fontWeight={700}>
+                        Projetos em destaque
+                      </Typography>
+
+                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => navigate("/codigos")}
+                          endIcon={<OpenInNewIcon />}
+                        >
+                          Ver todos (GitHub)
+                        </Button>
+
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => navigate("/projetos")}
+                          endIcon={<OpenInNewIcon />}
+                        >
+                          Ver protótipos (Figma)
+                        </Button>
+                      </Stack>
+                    </Stack>
+
+                    <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap">
+                      {FEATURED_PROJECTS.map((p) => (
+                        <Card
+                          key={p.title}
+                          elevation={2}
+                          sx={{
+                            width: { xs: "100%", sm: "48%", md: "30%" },
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <CardContent sx={{ flex: 1 }}>
+                            <Typography fontWeight={800}>{p.title}</Typography>
+
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                              {p.tagline}
+                            </Typography>
+
+                            {!!p.badges?.length ? (
+                              <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.5 }}>
+                                {p.badges.map((b) => (
+                                  <Chip key={b} label={b} size="small" />
+                                ))}
+                              </Stack>
+                            ) : null}
+
+                            {!!p.stack?.length ? (
+                              <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1 }}>
+                                {p.stack.slice(0, 5).map((t) => (
+                                  <Chip key={t} label={t} size="small" variant="outlined" />
+                                ))}
+                                {p.stack.length > 5 ? (
+                                  <Chip label={`+${p.stack.length - 5}`} size="small" variant="outlined" />
+                                ) : null}
+                              </Stack>
+                            ) : null}
+                          </CardContent>
+
+                          <CardActions sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}>
+                            {p.repoUrl ? (
+                              <Button
+                                size="small"
+                                variant="contained"
+                                startIcon={<GitHubIcon />}
+                                onClick={() => openExternal(p.repoUrl)}
+                              >
+                                GitHub
+                              </Button>
+                            ) : null}
+
+                            {p.figmaUrl ? (
+                              <Button size="small" variant="outlined" onClick={() => openExternal(p.figmaUrl)}>
+                                Figma
+                              </Button>
+                            ) : null}
+
+                            {p.demoUrl ? (
+                              <Button size="small" variant="outlined" onClick={() => openExternal(p.demoUrl)}>
+                                Demo
+                              </Button>
+                            ) : null}
+                          </CardActions>
+                        </Card>
+                      ))}
+                    </Stack>
+                  </Box>
+
+                  {/* Skills */}
                   {[
                     { title: "Linguagens", data: LANGUAGES },
                     { title: "Frameworks", data: FRAMEWORKS },

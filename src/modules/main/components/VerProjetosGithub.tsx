@@ -9,7 +9,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Alert,
   TextField,
   IconButton,
   Card,
@@ -17,17 +16,11 @@ import {
   CardActions,
   useMediaQuery,
   useTheme,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
   Stack,
   Chip,
   Tooltip,
 } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { motion } from "framer-motion";
 import { pageVariants } from "@/shared/styles/animationStyle";
 
@@ -119,17 +112,6 @@ const REPOS: Repo[] = [
   },
 ];
 
-function isGithubUrl(url: string) {
-  return /^https?:\/\/(www\.)?github\.com\/.+/i.test((url || "").trim());
-}
-
-function toGithubEmbedUrl(repoUrl: string) {
-  const u = (repoUrl || "").trim();
-  if (!u) return "";
-  if (!isGithubUrl(u)) return "";
-  return u;
-}
-
 const ClampWithTooltip = ({
   text,
   lines = 2,
@@ -170,7 +152,6 @@ const ClampWithTooltip = ({
  * Coluna "Stack" organizada:
  * - limita visual a 2 linhas (clamp)
  * - mostra todas as techs no tooltip
- * - mantém altura consistente
  */
 const StackChipsClamp = ({
   items,
@@ -186,7 +167,6 @@ const StackChipsClamp = ({
   const visible = items.slice(0, maxVisible);
   const remaining = items.length - visible.length;
 
-  // conteúdo do tooltip: lista completa
   const tooltipContent = (
     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, maxWidth: 420, p: 0.5 }}>
       {items.map((t) => (
@@ -204,8 +184,6 @@ const StackChipsClamp = ({
           WebkitLineClamp: lines,
           overflow: "hidden",
           textOverflow: "ellipsis",
-          // garante que chips “quebrem” dentro do clamp
-          // e mantém organização visual
           lineHeight: 1.3,
         }}
       >
@@ -222,21 +200,9 @@ const StackChipsClamp = ({
 
 export default function VerProjetosGithub() {
   const [search, setSearch] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [repoSelecionado, setRepoSelecionado] = useState<Repo | null>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const handleOpenModal = (r: Repo) => {
-    setRepoSelecionado(r);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setRepoSelecionado(null);
-  };
 
   const filteredRepos = useMemo(() => {
     if (!search) return REPOS;
@@ -275,10 +241,7 @@ export default function VerProjetosGithub() {
           flexDirection: "column",
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{ mb: 2, textAlign: isMobile ? "center" : "left" }}
-        >
+        <Typography variant="h5" sx={{ mb: 2, textAlign: isMobile ? "center" : "left" }}>
           Meus Repositórios (GitHub)
         </Typography>
 
@@ -295,6 +258,7 @@ export default function VerProjetosGithub() {
         {filteredRepos.length === 0 ? (
           <Typography align="center">Nenhum repositório encontrado.</Typography>
         ) : isMobile ? (
+          // MOBILE: cards sem botão visualizar (só abrir no GitHub)
           <Box display="flex" flexDirection="column" gap={2}>
             {filteredRepos.map((r) => (
               <Card
@@ -315,7 +279,6 @@ export default function VerProjetosGithub() {
                     </Typography>
                   ) : null}
 
-                  {/* mobile pode continuar livre, ou usar o clamp também */}
                   {!!r.stack?.length ? (
                     <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: "wrap" }}>
                       {r.stack.map((t) => (
@@ -326,10 +289,6 @@ export default function VerProjetosGithub() {
                 </CardContent>
 
                 <CardActions sx={{ justifyContent: "flex-end" }}>
-                  <IconButton color="primary" onClick={() => handleOpenModal(r)}>
-                    <VisibilityIcon fontSize="small" />
-                  </IconButton>
-
                   <IconButton
                     onClick={() => window.open(r.repoUrl, "_blank", "noopener,noreferrer")}
                     color="primary"
@@ -341,6 +300,7 @@ export default function VerProjetosGithub() {
             ))}
           </Box>
         ) : (
+          // DESKTOP: remove coluna "Repositório" e remove botão "Visualizar"
           <TableContainer
             component={Paper}
             sx={{
@@ -355,7 +315,6 @@ export default function VerProjetosGithub() {
                 <TableRow>
                   <TableCell>Projeto</TableCell>
                   <TableCell sx={{ width: 360 }}>Stack</TableCell>
-                  <TableCell>Repositório</TableCell>
                   <TableCell align="center">Ações</TableCell>
                 </TableRow>
               </TableHead>
@@ -377,30 +336,11 @@ export default function VerProjetosGithub() {
                       ) : null}
                     </TableCell>
 
-                    {/* ✅ Coluna stack agora organizada */}
                     <TableCell sx={{ verticalAlign: "top" }}>
                       <StackChipsClamp items={r.stack} lines={2} maxVisible={8} />
                     </TableCell>
 
-                    <TableCell sx={{ whiteSpace: "normal", wordBreak: "break-word" }}>
-                      <ClampWithTooltip text={r.repoUrl} lines={2} typographyVariant="body2" />
-
-                      {r.demoUrl ? (
-                        <ClampWithTooltip
-                          text={`Demo: ${r.demoUrl}`}
-                          lines={2}
-                          typographyVariant="body2"
-                          color="text.secondary"
-                          sx={{ mt: 0.5 }}
-                        />
-                      ) : null}
-                    </TableCell>
-
                     <TableCell align="center">
-                      <IconButton color="primary" onClick={() => handleOpenModal(r)}>
-                        <VisibilityIcon />
-                      </IconButton>
-
                       <IconButton
                         color="primary"
                         onClick={() => window.open(r.repoUrl, "_blank", "noopener,noreferrer")}
@@ -414,93 +354,6 @@ export default function VerProjetosGithub() {
             </Table>
           </TableContainer>
         )}
-
-        <Dialog
-          open={openModal}
-          onClose={handleCloseModal}
-          fullWidth
-          maxWidth="xl"
-          fullScreen={isMobile}
-        >
-          <DialogTitle>{repoSelecionado?.nome ?? "Preview"}</DialogTitle>
-
-          <DialogContent
-            dividers
-            sx={{
-              height: isMobile ? "calc(100dvh - 160px)" : "82dvh",
-              p: 2,
-            }}
-          >
-            {!repoSelecionado ? (
-              <Alert severity="warning">Nenhum repositório selecionado.</Alert>
-            ) : (
-              <Stack spacing={2} sx={{ height: "100%" }}>
-                <Box>
-                  {repoSelecionado.descricao ? (
-                    <Typography variant="body2" color="text.secondary">
-                      {repoSelecionado.descricao}
-                    </Typography>
-                  ) : null}
-
-                  {/* opcional: no modal também fica organizado */}
-                  <Box sx={{ mt: 1 }}>
-                    <StackChipsClamp items={repoSelecionado.stack} lines={3} maxVisible={12} />
-                  </Box>
-                </Box>
-
-                <Alert severity="info">
-                  Caso o GitHub bloqueie o preview no iframe, use “Abrir no GitHub”.
-                </Alert>
-
-                <Box
-                  sx={{
-                    position: "relative",
-                    flex: 1,
-                    minHeight: 0,
-                    borderRadius: 2,
-                    overflow: "hidden",
-                    border: "1px solid",
-                    borderColor: "divider",
-                  }}
-                >
-                  <iframe
-                    title={`GitHub - ${repoSelecionado.nome}`}
-                    src={toGithubEmbedUrl(repoSelecionado.repoUrl)}
-                    style={{ width: "100%", height: "100%", border: 0 }}
-                  />
-                </Box>
-              </Stack>
-            )}
-          </DialogContent>
-
-          <DialogActions>
-            {repoSelecionado?.demoUrl ? (
-              <Button
-                variant="outlined"
-                onClick={() =>
-                  window.open(repoSelecionado.demoUrl!, "_blank", "noopener,noreferrer")
-                }
-              >
-                Abrir Demo
-              </Button>
-            ) : null}
-
-            {repoSelecionado?.repoUrl ? (
-              <Button
-                variant="outlined"
-                onClick={() =>
-                  window.open(repoSelecionado.repoUrl, "_blank", "noopener,noreferrer")
-                }
-              >
-                Abrir no GitHub
-              </Button>
-            ) : null}
-
-            <Button variant="contained" onClick={handleCloseModal}>
-              Fechar
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Box>
     </motion.div>
   );
