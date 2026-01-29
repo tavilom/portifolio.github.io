@@ -129,10 +129,10 @@ const MainLayout: React.FC = () => {
     >
       <Box sx={{ p: 2 }}>
         <Typography variant="subtitle1" fontWeight={700}>
-          Menu
+          Otávio Mastrantonio
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          Navegação
+          Desenvolvedor FullStack Jr | UI/UX | Desenvolvedor ML JR
         </Typography>
       </Box>
 
@@ -166,7 +166,7 @@ const MainLayout: React.FC = () => {
 
       <Box sx={{ p: 2 }}>
         <Typography variant="caption" color="text.secondary">
-          Portfólio Pessoal
+          © Todos os direitor reservados a Otávio Mastrantonio
         </Typography>
       </Box>
     </Box>

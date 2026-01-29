@@ -1,21 +1,29 @@
 import { StrictMode } from "react";
 import { CssBaseline } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import { theme } from "../src/styles/themes/index.ts";
-import { AuthContextProvider } from "../src/context/AuthContext.tsx";
 import { ThemeProvider } from "@mui/material/styles";
+import { BrowserRouter } from "react-router-dom";
 
+import { theme } from "./styles/themes";
+import { AuthContextProvider } from "./context/AuthContext";
+import App from "./App";
 
-import "./index.css"
-import App from "./App.tsx";
+import "./index.css";
+
+// Detecta automaticamente se está no GitHub Pages
+const basename = window.location.pathname.startsWith("/portifolio.github.io")
+  ? "/portifolio.github.io"
+  : "/";
 
 createRoot(document.getElementById("root")!).render(
-  <AuthContextProvider>
-    <StrictMode>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </StrictMode>
-  </AuthContextProvider>
+  <StrictMode>
+    <AuthContextProvider>
+      <BrowserRouter basename={basename}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </AuthContextProvider>
+  </StrictMode>
 );

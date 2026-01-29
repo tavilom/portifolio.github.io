@@ -166,6 +166,60 @@ const ClampWithTooltip = ({
   );
 };
 
+/**
+ * Coluna "Stack" organizada:
+ * - limita visual a 2 linhas (clamp)
+ * - mostra todas as techs no tooltip
+ * - mantém altura consistente
+ */
+const StackChipsClamp = ({
+  items,
+  lines = 2,
+  maxVisible = 8,
+}: {
+  items?: string[];
+  lines?: number;
+  maxVisible?: number;
+}) => {
+  if (!items || items.length === 0) return <Typography variant="body2">-</Typography>;
+
+  const visible = items.slice(0, maxVisible);
+  const remaining = items.length - visible.length;
+
+  // conteúdo do tooltip: lista completa
+  const tooltipContent = (
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, maxWidth: 420, p: 0.5 }}>
+      {items.map((t) => (
+        <Chip key={t} label={t} size="small" />
+      ))}
+    </Box>
+  );
+
+  return (
+    <Tooltip title={tooltipContent} placement="top" arrow enterDelay={250}>
+      <Box
+        sx={{
+          display: "-webkit-box",
+          WebkitBoxOrient: "vertical",
+          WebkitLineClamp: lines,
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          // garante que chips “quebrem” dentro do clamp
+          // e mantém organização visual
+          lineHeight: 1.3,
+        }}
+      >
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
+          {visible.map((t) => (
+            <Chip key={t} label={t} size="small" />
+          ))}
+          {remaining > 0 ? <Chip label={`+${remaining}`} size="small" /> : null}
+        </Box>
+      </Box>
+    </Tooltip>
+  );
+};
+
 export default function VerProjetosGithub() {
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState(false);
@@ -221,7 +275,10 @@ export default function VerProjetosGithub() {
           flexDirection: "column",
         }}
       >
-        <Typography variant="h5" sx={{ mb: 2, textAlign: isMobile ? "center" : "left" }}>
+        <Typography
+          variant="h5"
+          sx={{ mb: 2, textAlign: isMobile ? "center" : "left" }}
+        >
           Meus Repositórios (GitHub)
         </Typography>
 
@@ -258,6 +315,7 @@ export default function VerProjetosGithub() {
                     </Typography>
                   ) : null}
 
+                  {/* mobile pode continuar livre, ou usar o clamp também */}
                   {!!r.stack?.length ? (
                     <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: "wrap" }}>
                       {r.stack.map((t) => (
@@ -296,7 +354,7 @@ export default function VerProjetosGithub() {
               <TableHead>
                 <TableRow>
                   <TableCell>Projeto</TableCell>
-                  <TableCell>Stack</TableCell>
+                  <TableCell sx={{ width: 360 }}>Stack</TableCell>
                   <TableCell>Repositório</TableCell>
                   <TableCell align="center">Ações</TableCell>
                 </TableRow>
@@ -319,16 +377,9 @@ export default function VerProjetosGithub() {
                       ) : null}
                     </TableCell>
 
-                    <TableCell sx={{ whiteSpace: "normal", wordBreak: "break-word" }}>
-                      {!!r.stack?.length ? (
-                        <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-                          {r.stack.map((t) => (
-                            <Chip key={t} label={t} size="small" />
-                          ))}
-                        </Stack>
-                      ) : (
-                        "-"
-                      )}
+                    {/* ✅ Coluna stack agora organizada */}
+                    <TableCell sx={{ verticalAlign: "top" }}>
+                      <StackChipsClamp items={r.stack} lines={2} maxVisible={8} />
                     </TableCell>
 
                     <TableCell sx={{ whiteSpace: "normal", wordBreak: "break-word" }}>
@@ -391,13 +442,10 @@ export default function VerProjetosGithub() {
                     </Typography>
                   ) : null}
 
-                  {!!repoSelecionado.stack?.length ? (
-                    <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: "wrap" }}>
-                      {repoSelecionado.stack.map((t) => (
-                        <Chip key={t} label={t} size="small" />
-                      ))}
-                    </Stack>
-                  ) : null}
+                  {/* opcional: no modal também fica organizado */}
+                  <Box sx={{ mt: 1 }}>
+                    <StackChipsClamp items={repoSelecionado.stack} lines={3} maxVisible={12} />
+                  </Box>
                 </Box>
 
                 <Alert severity="info">
