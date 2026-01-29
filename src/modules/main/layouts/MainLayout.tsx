@@ -17,6 +17,7 @@ import {
   Stack,
   Card,
   CardContent,
+  Avatar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
@@ -24,6 +25,9 @@ import CodeIcon from "@mui/icons-material/Code";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { LazyMotion, m } from "framer-motion";
+
+
+// import PROFILE_PHOTO from "@/assets/minha-foto.jpg";
 
 // ------------------------------
 // Tipos
@@ -43,21 +47,9 @@ type Skill = {
 // Sidebar
 // ------------------------------
 const TILES: Tile[] = [
-  {
-    key: "projetos",
-    title: "Protótipos do Figma",
-    icon: <DesignServicesIcon />,
-  },
-  {
-    key: "codigos",
-    title: "Projetos do GitHub",
-    icon: <CodeIcon />,
-  },
-  {
-    key: "contato",
-    title: "Contato",
-    icon: <ContactMailIcon />,
-  },
+  { key: "projetos", title: "Protótipos do Figma", icon: <DesignServicesIcon /> },
+  { key: "codigos", title: "Projetos do GitHub", icon: <CodeIcon /> },
+  { key: "contato", title: "Contato", icon: <ContactMailIcon /> },
 ];
 
 // ------------------------------
@@ -68,8 +60,7 @@ const LANGUAGES: Skill[] = [
   { title: "TypeScript", description: "Tipagem estática e organização" },
   {
     title: "Python",
-    description:
-      "Automação, backend, Machine Learning, Análise de Dados e Dashboards",
+    description: "Automação, backend, Machine Learning, Análise de Dados e Dashboards",
   },
 ];
 
@@ -91,8 +82,7 @@ const SKILLS: Skill[] = [
 // ------------------------------
 const SIDEBAR_WIDTH = 280;
 
-const loadFeatures = () =>
-  import("framer-motion").then((res) => res.domAnimation);
+const loadFeatures = () => import("framer-motion").then((res) => res.domAnimation);
 
 // ------------------------------
 // Componente
@@ -127,13 +117,33 @@ const MainLayout: React.FC = () => {
         flexDirection: "column",
       }}
     >
+      {/* ✅ Header com foto + nome */}
       <Box sx={{ p: 2 }}>
-        <Typography variant="subtitle1" fontWeight={700}>
-          Otávio Mastrantonio
-        </Typography>
-        <Typography variant="caption" color="text.secondary">
-          Desenvolvedor FullStack Jr | UI/UX | Desenvolvedor ML JR
-        </Typography>
+        <Stack spacing={1.25} alignItems="center">
+          <Avatar
+            // src={PROFILE_PHOTO}
+            alt="Otávio Mastrantonio"
+            sx={{
+              width: 84,
+              height: 84,
+              fontWeight: 800,
+              boxShadow: 2,
+              border: "2px solid",
+              borderColor: "divider",
+            }}
+          >
+            OM
+          </Avatar>
+
+          <Box sx={{ textAlign: "center" }}>
+            <Typography variant="subtitle1" fontWeight={700} sx={{ lineHeight: 1.2 }}>
+              Otávio Mastrantonio
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Desenvolvedor FullStack Jr | UI/UX | Desenvolvedor ML JR
+            </Typography>
+          </Box>
+        </Stack>
       </Box>
 
       <Divider />
@@ -146,9 +156,7 @@ const MainLayout: React.FC = () => {
             onClick={() => handleOpen(t.key)}
             sx={{ mx: 1, my: 0.5, borderRadius: 1.5 }}
           >
-            <ListItemIcon sx={{ minWidth: 44 }}>
-              {t.icon}
-            </ListItemIcon>
+            <ListItemIcon sx={{ minWidth: 44 }}>{t.icon}</ListItemIcon>
             <ListItemText
               primary={
                 <Typography variant="body2" fontWeight={700}>
@@ -212,9 +220,11 @@ const MainLayout: React.FC = () => {
             >
               {pathname === "/" ? (
                 <Stack spacing={4}>
-                  {[{ title: "Linguagens", data: LANGUAGES },
+                  {[
+                    { title: "Linguagens", data: LANGUAGES },
                     { title: "Frameworks", data: FRAMEWORKS },
-                    { title: "Skills", data: SKILLS }].map((section) => (
+                    { title: "Skills", data: SKILLS },
+                  ].map((section) => (
                     <Box key={section.title}>
                       <Typography variant="h6" fontWeight={700} mb={2}>
                         {section.title}
@@ -228,9 +238,7 @@ const MainLayout: React.FC = () => {
                             sx={{ width: { xs: "100%", sm: "48%", md: "30%" } }}
                           >
                             <CardContent>
-                              <Typography fontWeight={700}>
-                                {skill.title}
-                              </Typography>
+                              <Typography fontWeight={700}>{skill.title}</Typography>
                               <Typography variant="body2" color="text.secondary">
                                 {skill.description}
                               </Typography>
