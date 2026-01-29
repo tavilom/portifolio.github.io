@@ -1,41 +1,41 @@
-# RecicLAR
-**Objetivo do Sistema:**  Auxiliar empresas de reciclagem à ter um melhor controle de seus dados, atravez de uma interface simples e amigavel.
-#
+# Portfolio Simples
+
 
 ## 1 - Descrição do Sistema:
 
 ### 1.1 Principais Funcionalidades:
-° Módulo de cadastro de mercadorias: Área destinada ao cadastro de mercadoria que deram entrada na reciclagem. <br/>
-° Módulo de vizualização de estoque: Área destinada há vizualizar os itens que foram comprados, junto com a quantidade e o valor da compra por unidade. <br/>
-° Módulo de cadastro de funcionarios: Área destinado ao cadastro de funcionarios dentro da reciclagem, nela tem  os campos para nome, função e salário. <br/>
-° Módulo de vale: Área destinada ao emprestimo de dinheiro tanto para funcionarios como para catadores, nele contem uma lista de visualização dos devedores ativos, junto com um campo para realizar o emprestimo. <br/>
-° Módulo de movimentação de caixa: Área destinada há vizualização da movimentação monetária realizada em um determinado periodo de tempo escolhido.<br/>
-° Módulo de desconto: Área destinada para realizar o abate do devedor que realizou o vale. <br/>
-° Módulo de pesagem: Área destinada há pesagem de materiáis que derem entrada na reciclagem. <br/>
+° Módulo de Projetos do Fgma: Área destinada para publicar os prototipos do figma. <br/>
+° Módulo de Projetos do Github: Área destinada para publicar os links, junto com stack e uma descrição sobre os repositórios trabalhados. <br/>
+° Módulo de Contato: Área destinado para realziar o contato. <br/>
+
 #     
 
 ## 2 - Técnologias usadas no projeto
 
-### 2.1 Bando de Dados
-Utilizado Prisma e MySQL para realizar a comunicação do banco de dados juntos com as tabelas.
-#
+### Devido ao fato de ser um portfólio simples com intuito de poder usar a hospedagem do github, é feito apenas com hardcode em front-end
 
-### 2.2 BackEnd
-Utilizando NestJS + TypeScript pare realizar toda a configuração do backend, junto com comunicação com banco.
-#
 
-### 2.3 FrontEnd
+### 2.1 FrontEnd
 Utilizado o framekork ReactJS, junto com a linguagem de programação TypeScript, o builder Vite, e a biblioteca do Material UI (MUI).
 #
 
 ## 3 - Clonando o repositório e instalando dependencias
 
 Primeiro utilizando o comando **git clone** mais o endereço **SSH** ou **HTTPS**, o git vai realizar um clone do repositorio. 
-Após realizar o **clone**, abra a pasta raiz do projeto e rode o comando **npm install** ou só **npm i** para instalar todas as dependencias do front-end, realizado o comando na pasta raiz do projeto, navegue até a pasta **server** e execute novamente execute o comando **npm i** para instalar as dependencias do back
--end.
+Após realizar o **clone**, abra a pasta raiz do projeto e rode o comando **npm install** ou só **npm i** para instalar todas as dependencias do Projeto.
 #
 
 ## 4 - Executando o sistema localmente em ambiente de teste
-Após realizar o clone do projeto e instalar as dependencias, tanto no front end como no back end(pasta server), execute o comando na pasta raiz **npm run dev** para startar o front-end, e dentro da pasta server execute o comando **npm run start** para startar o servidor.
-O sistema irá rodar no endereço http://localhost:5173/
+Após realizar o clone do projeto e instalar as dependencias, execute o comando na pasta raiz **npm run dev** para startar o projeto.
+O sistema irá rodar no endereço http://localhost:5173/"nome do seu repositorio" ** lembrando que tem que contem .github.io
 
+
+## 5 -  Publicação do projeto
+Para poder publicar o projeto o nome do repositorio deve ser "seu-repo.github.io"(onde diz seu-repo, mudar para o nome real), após criar o repositório, vá em configurações, na aba lateral no github, encontre a opção Pages, deixe as configurações igual as seguintes:
+
+### Build and deployment -> Sourece -> Deploy from a branch
+
+### Brach vai estar em  "main", mude para "gh-rapes" e o folder pode manter "/(root)"
+Após isso no terminal da pasta do projeto no seu computador rode os comando **npm run build** e depos **npm run deploy**
+
+o link vai ser **seu-usuario.github.io/seu-repo.github.io/**
