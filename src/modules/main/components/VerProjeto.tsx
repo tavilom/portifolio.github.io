@@ -138,7 +138,7 @@ export default function VerProjeto() {
     if (mode === "mobile") return { w: 390, h: 844 };
     if (mode === "tablet") return { w: 820, h: 1180 };
     if (mode === "desktop") return { w: 1280, h: 720 };
-    return null; // fit
+    return null; 
   }, [mode]);
 
   const copyLink = async () => {
@@ -271,8 +271,6 @@ export default function VerProjeto() {
         <DialogContent
           dividers
           sx={{
-            // altura responsiva do conteúdo do dialog
-            // dvh funciona melhor em mobile moderno
             height: isMobile ? "calc(100dvh - 160px)" : "82dvh",
             p: 2,
           }}
@@ -331,7 +329,6 @@ export default function VerProjeto() {
                     bgcolor: "background.default",
                   }}
                 >
-                  {/* “frame” centralizado (ou fit total) */}
                   <Box
                     sx={{
                       position: "relative",

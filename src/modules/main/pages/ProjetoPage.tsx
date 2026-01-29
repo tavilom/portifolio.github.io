@@ -13,7 +13,12 @@ const ProjetoPage = () => {
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   useEffect(() => {
+    const previousTitle = document.title;
     document.title = "Projetos";
+
+    return () => {
+      document.title = previousTitle;
+    }
   }, []);
 
   return (
@@ -26,7 +31,6 @@ const ProjetoPage = () => {
         transition={prefersReducedMotion ? undefined : { duration: 0.35 }}
         variants={pageVariants}
         style={{
-          // evita “scroll fantasma” de 100vw/100vh
           height: "100%",
           width: "100%",
           overflow: "hidden",
@@ -43,7 +47,7 @@ const ProjetoPage = () => {
               boxSizing: "border-box",
               minWidth: 0,
               minHeight: 0,
-              overflow: "hidden", // rolável é só o conteúdo
+              overflow: "hidden", 
             }}
           >
             {/* Cabeçalho */}

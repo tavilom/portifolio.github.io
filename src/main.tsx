@@ -10,7 +10,7 @@ import App from "./App";
 
 import "./index.css";
 
-// Detecta automaticamente se está no GitHub Pages
+
 const basename = window.location.pathname.startsWith("/portifolio.github.io")
   ? "/portifolio.github.io"
   : "/";

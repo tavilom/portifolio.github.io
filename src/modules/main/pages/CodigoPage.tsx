@@ -18,11 +18,16 @@ const CodigoPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const prefersReducedMotion = useMediaQuery(
-    "(prefers-reduced-motion: reduce)"
+    "(prefers-reduced-motion: reduce)",
   );
 
   useEffect(() => {
-    document.title = "Projetos do Github";
+    const previousTitle = document.title;
+    document.title = "Protótipos";
+
+    return () => {
+      document.title = previousTitle;
+    };
   }, []);
 
   return (

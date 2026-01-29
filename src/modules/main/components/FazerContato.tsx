@@ -60,7 +60,6 @@ const CONTACTS: ContactCard[] = [
     title: "LinkedIn",
     description: "Veja meu perfil profissional, experiências e projetos.",
     cta: "Abrir LinkedIn",
-    // TROQUE pelo seu link real
     href: "https://www.linkedin.com/in/otavio-mastrantonio/",
     icon: <LinkedInIcon fontSize="large" />,
     kind: "external",
@@ -77,7 +76,6 @@ const CONTACTS: ContactCard[] = [
     title: "WhatsApp",
     description: "Fale comigo pelo WhatsApp para um contato rápido.",
     cta: "Chamar no WhatsApp",
-    // TROQUE 55DDDNÚMERO pelo seu número (55 + DDD + número, sem espaços)
     href: "https://wa.me/5553981142527?text=Ol%C3%A1%21%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar.",
     icon: <WhatsAppIcon fontSize="large" />,
     kind: "external",

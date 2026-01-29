@@ -25,7 +25,7 @@ import { motion } from "framer-motion";
 import { pageVariants } from "@/shared/styles/animationStyle";
 
 type Repo = {
-  id: string; // usado apenas como key interna
+  id: string; 
   nome: string;
   descricao?: string;
   stack?: string[];
@@ -148,11 +148,6 @@ const ClampWithTooltip = ({
   );
 };
 
-/**
- * Coluna "Stack" organizada:
- * - limita visual a 2 linhas (clamp)
- * - mostra todas as techs no tooltip
- */
 const StackChipsClamp = ({
   items,
   lines = 2,
@@ -258,7 +253,6 @@ export default function VerProjetosGithub() {
         {filteredRepos.length === 0 ? (
           <Typography align="center">Nenhum repositório encontrado.</Typography>
         ) : isMobile ? (
-          // MOBILE: cards sem botão visualizar (só abrir no GitHub)
           <Box display="flex" flexDirection="column" gap={2}>
             {filteredRepos.map((r) => (
               <Card
@@ -300,7 +294,6 @@ export default function VerProjetosGithub() {
             ))}
           </Box>
         ) : (
-          // DESKTOP: remove coluna "Repositório" e remove botão "Visualizar"
           <TableContainer
             component={Paper}
             sx={{

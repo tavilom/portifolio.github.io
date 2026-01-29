@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -49,9 +49,9 @@ type Skill = {
 
 type FeaturedProject = {
   title: string;
-  tagline: string; // 1 frase de impacto
-  badges: string[]; // papel / tipo / status
-  stack: string[]; // stack principal (curta)
+  tagline: string;
+  badges: string[];
+  stack: string[];
   repoUrl?: string;
   figmaUrl?: string;
   demoUrl?: string;
@@ -61,32 +61,39 @@ type FeaturedProject = {
 // Sidebar
 // ------------------------------
 const TILES: Tile[] = [
-  { key: "projetos", title: "Protótipos do Figma", icon: <DesignServicesIcon /> },
+  {
+    key: "projetos",
+    title: "Protótipos do Figma",
+    icon: <DesignServicesIcon />,
+  },
   { key: "codigos", title: "Projetos do GitHub", icon: <CodeIcon /> },
   { key: "contato", title: "Contato", icon: <ContactMailIcon /> },
 ];
 
 // ------------------------------
-// Home - Projetos em destaque (hardcode)
+// Home - Projetos em destaque
 // ------------------------------
 const FEATURED_PROJECTS: FeaturedProject[] = [
   {
     title: "Termômetro do Humor",
-    tagline: "Mapeamento do estado psicológico com interface amigável e fluxo rápido.",
+    tagline:
+      "Mapeamento do estado psicológico com interface amigável e fluxo rápido.",
     badges: ["Fullstack", "MVP", "Concluído"],
     stack: ["React", "TypeScript", "NestJS", "Prisma", "MySQL"],
     repoUrl: "https://github.com/tavilom/Termomedo-do-humor",
   },
   {
     title: "Caixinha do bem-estar",
-    tagline: "Micro-momentos de reconhecimento para fortalecer cultura e reduzir estresse.",
+    tagline:
+      "Micro-momentos de reconhecimento para fortalecer cultura e reduzir estresse.",
     badges: ["UI/UX", "Fullstack", "Concluído"],
     stack: ["React", "TypeScript", "NestJS", "Prisma", "MySQL"],
     repoUrl: "https://github.com/tavilom/Caixinha-do-bem-estar",
   },
   {
     title: "FAQ Tasy (com Chatbot)",
-    tagline: "Apoio à decisão + chatbot com LLM interna para dúvidas recorrentes.",
+    tagline:
+      "Apoio à decisão + chatbot com LLM interna para dúvidas recorrentes.",
     badges: ["Fullstack", "Machine Learnign", "Concluido"],
     stack: ["React", "NestJS", "Python", "FastAPI", "XGBoost"],
     repoUrl: "https://github.com/tavilom/faq-tasy",
@@ -101,7 +108,8 @@ const LANGUAGES: Skill[] = [
   { title: "TypeScript", description: "Tipagem estática e organização" },
   {
     title: "Python",
-    description: "Automação, backend, Machine Learning, Análise de Dados e Dashboards",
+    description:
+      "Automação, backend, Machine Learning, Análise de Dados e Dashboards",
   },
 ];
 
@@ -123,7 +131,8 @@ const SKILLS: Skill[] = [
 // ------------------------------
 const SIDEBAR_WIDTH = 280;
 
-const loadFeatures = () => import("framer-motion").then((res) => res.domAnimation);
+const loadFeatures = () =>
+  import("framer-motion").then((res) => res.domAnimation);
 
 function openExternal(url?: string) {
   if (!url) return;
@@ -141,6 +150,15 @@ const MainLayout: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = "Home";
+
+    return () => {
+      document.title = previousTitle;
+    };
+  }, []);
 
   const tiles = useMemo(() => TILES, []);
 
@@ -181,7 +199,11 @@ const MainLayout: React.FC = () => {
           </Avatar>
 
           <Box sx={{ textAlign: "center" }}>
-            <Typography variant="subtitle1" fontWeight={700} sx={{ lineHeight: 1.2 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight={700}
+              sx={{ lineHeight: 1.2 }}
+            >
               Otávio Mastrantonio
             </Typography>
             <Typography variant="caption" color="text.secondary">
@@ -226,7 +248,12 @@ const MainLayout: React.FC = () => {
   );
 
   return (
-    <Box sx={{ minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        backgroundColor: theme.palette.background.default,
+      }}
+    >
       {/* Topbar */}
       <AppBar position="static" elevation={2}>
         <Toolbar>
@@ -265,7 +292,7 @@ const MainLayout: React.FC = () => {
             >
               {pathname === "/" ? (
                 <Stack spacing={4}>
-                  {/* ✅ NOVO: Destaques */}
+                  {/* Destaques */}
                   <Box>
                     <Stack
                       direction={{ xs: "column", sm: "row" }}
@@ -278,7 +305,12 @@ const MainLayout: React.FC = () => {
                         Projetos em destaque
                       </Typography>
 
-                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        flexWrap="wrap"
+                        useFlexGap
+                      >
                         <Button
                           size="small"
                           variant="outlined"
@@ -299,7 +331,12 @@ const MainLayout: React.FC = () => {
                       </Stack>
                     </Stack>
 
-                    <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap">
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      useFlexGap
+                      flexWrap="wrap"
+                    >
                       {FEATURED_PROJECTS.map((p) => (
                         <Card
                           key={p.title}
@@ -313,12 +350,22 @@ const MainLayout: React.FC = () => {
                           <CardContent sx={{ flex: 1 }}>
                             <Typography fontWeight={800}>{p.title}</Typography>
 
-                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ mt: 0.75 }}
+                            >
                               {p.tagline}
                             </Typography>
 
                             {!!p.badges?.length ? (
-                              <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1.5 }}>
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                useFlexGap
+                                flexWrap="wrap"
+                                sx={{ mt: 1.5 }}
+                              >
                                 {p.badges.map((b) => (
                                   <Chip key={b} label={b} size="small" />
                                 ))}
@@ -326,18 +373,35 @@ const MainLayout: React.FC = () => {
                             ) : null}
 
                             {!!p.stack?.length ? (
-                              <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mt: 1 }}>
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                useFlexGap
+                                flexWrap="wrap"
+                                sx={{ mt: 1 }}
+                              >
                                 {p.stack.slice(0, 5).map((t) => (
-                                  <Chip key={t} label={t} size="small" variant="outlined" />
+                                  <Chip
+                                    key={t}
+                                    label={t}
+                                    size="small"
+                                    variant="outlined"
+                                  />
                                 ))}
                                 {p.stack.length > 5 ? (
-                                  <Chip label={`+${p.stack.length - 5}`} size="small" variant="outlined" />
+                                  <Chip
+                                    label={`+${p.stack.length - 5}`}
+                                    size="small"
+                                    variant="outlined"
+                                  />
                                 ) : null}
                               </Stack>
                             ) : null}
                           </CardContent>
 
-                          <CardActions sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}>
+                          <CardActions
+                            sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}
+                          >
                             {p.repoUrl ? (
                               <Button
                                 size="small"
@@ -350,13 +414,21 @@ const MainLayout: React.FC = () => {
                             ) : null}
 
                             {p.figmaUrl ? (
-                              <Button size="small" variant="outlined" onClick={() => openExternal(p.figmaUrl)}>
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={() => openExternal(p.figmaUrl)}
+                              >
                                 Figma
                               </Button>
                             ) : null}
 
                             {p.demoUrl ? (
-                              <Button size="small" variant="outlined" onClick={() => openExternal(p.demoUrl)}>
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={() => openExternal(p.demoUrl)}
+                              >
                                 Demo
                               </Button>
                             ) : null}
@@ -377,7 +449,12 @@ const MainLayout: React.FC = () => {
                         {section.title}
                       </Typography>
 
-                      <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap">
+                      <Stack
+                        direction="row"
+                        spacing={2}
+                        useFlexGap
+                        flexWrap="wrap"
+                      >
                         {section.data.map((skill) => (
                           <Card
                             key={skill.title}
@@ -385,8 +462,13 @@ const MainLayout: React.FC = () => {
                             sx={{ width: { xs: "100%", sm: "48%", md: "30%" } }}
                           >
                             <CardContent>
-                              <Typography fontWeight={700}>{skill.title}</Typography>
-                              <Typography variant="body2" color="text.secondary">
+                              <Typography fontWeight={700}>
+                                {skill.title}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
                                 {skill.description}
                               </Typography>
                             </CardContent>
