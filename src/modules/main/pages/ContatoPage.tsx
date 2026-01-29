@@ -12,7 +12,7 @@ import { pageVariants } from "@/shared/styles/animationStyle";
 import PaperBackground from "@/shared/components/PaperBackground";
 import { Link as RouterLink } from "react-router-dom";
 import { useEffect } from "react";
-import VerProjetosGithub from "../components/VerProjetosGithub";
+import FazerContato from "../components/FazerContato";
 
 const CodigoPage = () => {
   const theme = useTheme();
@@ -22,7 +22,7 @@ const CodigoPage = () => {
   );
 
   useEffect(() => {
-    document.title = "Projetos do Github";
+    document.title = "Contatos";
   }, []);
 
   return (
@@ -99,7 +99,7 @@ const CodigoPage = () => {
                 overflowX: "hidden",
               }}
             >
-              <VerProjetosGithub />
+              <FazerContato />
             </Box>
           </Box>
         </PaperBackground>
