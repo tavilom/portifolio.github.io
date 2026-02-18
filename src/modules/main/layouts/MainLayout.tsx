@@ -30,6 +30,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { LazyMotion, m } from "framer-motion";
+import foto from "@/modules/main/public/foto.jpg"
 
 // import PROFILE_PHOTO from "@/assets/minha-foto.jpg";
 
@@ -184,7 +185,7 @@ const MainLayout: React.FC = () => {
       <Box sx={{ p: 2 }}>
         <Stack spacing={1.25} alignItems="center">
           <Avatar
-            // src={PROFILE_PHOTO}
+            src={foto}
             alt="Otávio Mastrantonio"
             sx={{
               width: 84,
